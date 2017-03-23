@@ -6,14 +6,15 @@ logging.basicConfig(level=logging.INFO)
 
 
 def _call_systemctl(action):
-    if action not in ['start', 'stop', 'restart']:
-        raise ValueError("action %s not in ['start', 'stop', 'restart']" % action)
-    try:
-        check_call("sudo", "/usr/bin/systemctl", action, "oulib-celery-workerq")
-    except CalledProcessError as err:
-        logging.error(err)
-        return({"ERROR": err})
-    return("SUCCESS")
+    if action in ['start', 'stop', 'restart']:
+        try:
+            check_call("sudo", "/usr/bin/systemctl", action, "oulib-celery-workerq")
+        except CalledProcessError as err:
+            logging.error(err)
+            return({"ERROR": err})
+        return("SUCCESS")
+    else:
+        return({"ERROR": "Unsupported action"})
 
 
 @task()
