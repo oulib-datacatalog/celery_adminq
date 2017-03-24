@@ -8,7 +8,7 @@ logging.basicConfig(level=logging.INFO)
 def _call_systemctl(action):
     if action in ['start', 'stop', 'restart']:
         try:
-            check_call("sudo", "/usr/bin/systemctl", action, "oulib-celery-workerq")
+            check_call(["sudo", "/usr/bin/systemctl", action, "oulib-celery-workerq"])
         except CalledProcessError as err:
             logging.error(err)
             return({"ERROR": err})
