@@ -1,5 +1,5 @@
 from celery.task import task
-from subprocess import call, check_call, CalledProcessError
+from subprocess import check_call, CalledProcessError
 import logging
 
 logging.basicConfig(level=logging.INFO)
@@ -7,12 +7,12 @@ logging.basicConfig(level=logging.INFO)
 
 def _call_systemctl(action):
     if action in ['start', 'stop', 'restart']:
-        #try:
-        call(["sudo", "-u", "celery-adminq", "/usr/bin/systemctl", action, "oulib-celery-workerq"])
-        #except CalledProcessError as err:
-        #    logging.error(err)
-        #    return({"ERROR": err})
-        #return("SUCCESS")
+        try:
+            check_call(["sudo", "/usr/bin/systemctl", action, "oulib-celery-workerq"])
+        except CalledProcessError as err:
+            logging.error(err)
+            return({"ERROR": err})
+        return("SUCCESS")
     else:
         return({"ERROR": "Unsupported action"})
 
