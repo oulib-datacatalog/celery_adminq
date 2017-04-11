@@ -7,15 +7,15 @@ logging.basicConfig(level=logging.INFO)
 
 def _call_systemctl(action, service):
     if action not in ["start", "stop", "restart"]:
-        return({"ERROR": "Unsupported action: %s", action})
+        return {"ERROR": "Unsupported action: %s", action} 
     if service not in ["oulib-celery-workerq", "oulib-celery-workerq-installer"]:
-        return({"ERROR": "Unkown service: %s", service})
+        return {"ERROR": "Unkown service: %s", service} 
     try:
         check_call(["sudo", "/usr/bin/systemctl", action, service])
     except CalledProcessError as err:
         logging.error(err)
-        return({"ERROR": err})
-    return("SUCCESS")
+        return {"ERROR": err} 
+    return {"status": "SUCCESS"}
 
 
 @task()
