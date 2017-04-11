@@ -31,7 +31,7 @@ def stopworker():
 
 
 @task()
-def restartworker(reisntall=False):
+def restartworker(reinstall=False):
     if reinstall:
         _call_systemctl("start", "oulib-celery-workerq-installer")
     _call_systemctl("restart", "oulib-celery-workerq")
