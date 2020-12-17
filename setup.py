@@ -1,10 +1,10 @@
 from setuptools import setup, find_packages
 setup(name='adminq',
-      version='0.2',
+      version='0.3',
       packages= find_packages(),
       install_requires=[
-          'celery==3.1.22',
-          'pymongo==3.2.1',
+          'celery',
+          'pymongo',
       ],
       include_package_data=True,
 )
