@@ -1,8 +1,17 @@
-from celery.task import task
+from celery import Celery
 from subprocess import check_call, CalledProcessError
 import logging
 
 logging.basicConfig(level=logging.INFO)
+
+try:
+    import celeryconfig
+except ImportError:
+    logging.error('Failed to import celeryconfig - exiting!')
+    exit()
+
+app = Celery()
+app.config_from_object(celeryconfig)
 
 
 def _call_systemctl(action, service):
@@ -18,19 +27,19 @@ def _call_systemctl(action, service):
     return {"status": "SUCCESS"}
 
 
-@task()
+@app.task()
 def startworker(reinstall=False):
     if reinstall:
         _call_systemctl("start", "oulib-celery-workerq-installer")
     _call_systemctl("start", "oulib-celery-workerq")
 
 
-@task()
+@app.task()
 def stopworker():
     _call_systemctl("stop", "oulib-celery-workerq")
 
 
-@task()
+@app.task()
 def restartworker(reinstall=False):
     if reinstall:
         _call_systemctl("start", "oulib-celery-workerq-installer")
